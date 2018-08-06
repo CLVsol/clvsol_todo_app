@@ -18,6 +18,4 @@
 #
 ###############################################################################
 
-from . import models
-from . import wizard
-from . import controllers
+from . import todo_task_mass_update
