@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem name="Todos" id="clv_todo.menu_todos"
+            groups="clv_todo.group_user"
+            sequence="10"
+            action="clv_todo.clv_todo_task_action"/>
+
+    </data>
+</odoo>

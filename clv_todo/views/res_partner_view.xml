@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        
+        <record id="res_partner_view_form_jcafb" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <field name="lang" position="after">
+                    <field name="todo_ids" />
+                </field>
+            </field>
+        </record>
+       
+    </data>
+</odoo>
