@@ -20,7 +20,7 @@
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
-from odoo.addons.base.res.res_request import referenceable_models
+# from odoo.addons.base.res.res_request import referenceable_models
 
 
 class TodoTask(models.Model):
@@ -87,3 +87,32 @@ class TodoTask_2(models.Model):
         for todo in self:
             if len(todo.name) < 5:
                 raise ValidationError('Title must have 5 chars!')
+
+
+class TodoTask_3(models.Model):
+    _inherit = 'clv.todo.task'
+
+    @api.onchange('user_id')
+    def onchange_user_id(self):
+        if not self.user_id:
+            self.team_ids = None
+            return {
+                'warning': {
+                    'title': 'Responsible User Reset',
+                    'message': 'Please choose a new Team.',
+                }
+            }
+
+    @api.model
+    def create(self, vals):
+        # Code before create: should use the `vals` dict
+        new_record = super().create(vals)
+        # Code after create: can use the `new_record` created
+        return new_record
+
+    @api.multi
+    def write(self, vals):
+        # Code before write: can use `self`, with the old values
+        super().write(vals)
+        # Code after write: can use `self`, with the updated values
+        return True
