@@ -40,7 +40,10 @@
         'views/todo_menu_view.xml',
         'views/index_template.xml',
     ],
-    'demo': [],
+    'demo': [
+        'data/clv.todo.task.csv',
+        'data/todo_task.xml',
+    ],
     'test': [],
     'init_xml': [],
     'test': [],
