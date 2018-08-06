@@ -20,3 +20,5 @@
 
 from . import todo_task
 from . import res_partner
+from . import todo_task_category
+from . import todo_task_stage

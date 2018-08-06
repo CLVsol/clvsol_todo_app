@@ -19,6 +19,8 @@
 ###############################################################################
 
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
+from odoo.addons.base.res.res_request import referenceable_models
 
 
 class TodoTask(models.Model):
@@ -57,3 +59,31 @@ class TodoTask(models.Model):
             values['active'] = True
         # return super(TodoTask, self).write(values) # keeping Python 2 compatibility
         return super().write(values)
+
+
+class TodoTask_2(models.Model):
+    _name = 'clv.todo.task'
+    _inherit = ['clv.todo.task', 'mail.thread']
+
+    effort_estimate = fields.Integer()
+    name = fields.Char(help="What needs to be done?")
+
+    refers_to = fields.Reference(
+        # Set a Selection list, such as:
+        [('res.user', 'User'), ('res.partner', 'Partner')],
+        # Or use standard "Referencable Models":
+        # referenceable_models,
+        # 'Refers to',  # string= (title)
+    )
+
+    _sql_constraints = [(
+        'todo_task_name_unique',
+        'UNIQUE (name, active)',
+        'Task title must be unique!'
+    )]
+
+    @api.constrains('name')
+    def _check_name_size(self):
+        for todo in self:
+            if len(todo.name) < 5:
+                raise ValidationError('Title must have 5 chars!')

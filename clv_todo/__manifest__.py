@@ -27,6 +27,7 @@
     'license': 'AGPL-3',
     'website': 'https://github.com/CLVsol',
     'depends': [
+        'mail',
         'clv_base',
     ],
     'data': [
@@ -35,6 +36,7 @@
         'security/todo_access_rules.xml',
         'views/todo_task_view.xml',
         'views/res_partner_view.xml',
+        'views/todo_task_category_view.xml',
         'views/todo_menu_view.xml',
         'views/index_template.xml',
     ],
