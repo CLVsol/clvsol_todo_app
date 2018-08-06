@@ -6,6 +6,6 @@
 clvsol_todo_app
 ===============
 
-CLVsol To-Do Application
+To-Do Application (based on book "Odoo 11 Development Essentials - Third Edition by Daniel Reis")
 
 Developed by `CLVsol <https://github.com/CLVsol>`_.
