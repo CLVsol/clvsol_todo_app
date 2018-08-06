@@ -70,7 +70,7 @@ class TodoTaskStage(models.Model):
 class TodoTask(models.Model):
     _inherit = 'clv.todo.task'
 
-    stage_id = fields.Many2one(comodel_name='todo.task.stage', string='Stage')
+    stage_id = fields.Many2one(comodel_name='clv.todo.task.stage', string='Stage')
 
     state = fields.Selection(
         related='stage_id.state',

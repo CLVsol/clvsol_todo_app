@@ -3,3 +3,11 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_clv_todo_task_user,clv.todo.task.user,model_clv_todo_task,clv_todo.group_user,1,0,0,0
 access_clv_todo_task_manager,clv.todo.task.manager,model_clv_todo_task,clv_todo.group_manager,1,1,1,0
 access_clv_todo_task_supmanager,clv.todo.task.supmanager,model_clv_todo_task,clv_todo.group_supmanager,1,1,1,1
+
+access_clv_todo_task_category_user,clv.todo.task.category.user,model_clv_todo_task_category,clv_todo.group_user,1,0,0,0
+access_clv_todo_task_category_manager,clv.todo.task.manager.category,model_clv_todo_task_category,clv_todo.group_manager,1,1,1,0
+access_clv_todo_task_category_supmanager,clv.todo.task.category.supmanager,model_clv_todo_task_category,clv_todo.group_supmanager,1,1,1,1
+
+access_clv_todo_task_stage_user,clv.todo.task.stage.user,model_clv_todo_task_stage,clv_todo.group_user,1,0,0,0
+access_clv_todo_task_stage_manager,clv.todo.task.manager.stage,model_clv_todo_task_stage,clv_todo.group_manager,1,1,1,0
+access_clv_todo_task_stage_supmanager,clv.todo.task.stage.supmanager,model_clv_todo_task_stage,clv_todo.group_supmanager,1,1,1,1
