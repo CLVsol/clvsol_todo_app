@@ -124,16 +124,17 @@ class TodoApp(object):
             db.my_company_setup(self.CompanyName, self.website, self.Company_image)
             print('\n--> Administrator()')
             db.administrator_setup(self.admin_user_email, self.Administrator_image)
-            print('\n--> demo_user_setup()')
-            db.demo_user_setup(
-                self.demo_user_name, self.demo_user_email, self.CompanyName,
-                self.demo_user, self.demo_user_pw, self.Demo_User_image
-            )
-            print('\n--> data_administrator_user_setup()')
-            db.data_administrator_user_setup(
-                self.data_admin_user_name, self.data_admin_user_email, self.CompanyName,
-                self.data_admin_user, self.data_admin_user_pw, self.DataAdministrator_image
-            )
+            if cli.demo_data is False:
+                print('\n--> demo_user_setup()')
+                db.demo_user_setup(
+                    self.demo_user_name, self.demo_user_email, self.CompanyName,
+                    self.demo_user, self.demo_user_pw, self.Demo_User_image
+                )
+                print('\n--> data_administrator_user_setup()')
+                db.data_administrator_user_setup(
+                    self.data_admin_user_name, self.data_admin_user_email, self.CompanyName,
+                    self.data_admin_user, self.data_admin_user_pw, self.DataAdministrator_image
+                )
         else:
             print('\n--> newDB: ', newDB)
             client = erppeek.Client(
