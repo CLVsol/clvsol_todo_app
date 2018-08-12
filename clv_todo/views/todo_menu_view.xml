@@ -2,10 +2,29 @@
 <odoo>
     <data>
 
-        <menuitem name="Todos" id="clv_todo.menu_todos"
+        <menuitem name="To-do" id="clv_todo.menu_todo"
             groups="clv_todo.group_user"
-            sequence="10"
-            action="clv_todo.clv_todo_task_action"/>
+            sequence="10"/>
+
+		<menuitem name="Tasks" id="clv_todo.menu_todo_tasks"
+		    sequence="10"
+		    parent="clv_todo.menu_todo"
+		    action="clv_todo.clv_todo_task_action" />
+
+		<menuitem name="Configuration" id="clv_todo.menu_todo_config"
+		    sequence="100"
+		    parent="clv_todo.menu_todo"
+		    groups="base.group_system" />
+
+		<menuitem name="Stages" id="clv_todo.menu_todo_config_stages"
+		    sequence="10"
+			parent="clv_todo.menu_todo_config"
+			action="clv_todo.clv_todo_task_stage_action" />
+
+		<menuitem name="Categories" id="clv_todo.menu_todo_config_categories"
+		    sequence="20"
+			parent="clv_todo.menu_todo_config"
+			action="clv_todo.clv_todo_task_category_action" />
 
     </data>
 </odoo>

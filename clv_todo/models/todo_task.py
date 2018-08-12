@@ -70,7 +70,7 @@ class TodoTask_2(models.Model):
 
     refers_to = fields.Reference(
         # Set a Selection list, such as:
-        [('res.user', 'User'), ('res.partner', 'Partner')],
+        [('res.users', 'User'), ('res.partner', 'Partner')],
         # Or use standard "Referencable Models":
         # referenceable_models,
         # 'Refers to',  # string= (title)
@@ -116,3 +116,19 @@ class TodoTask_3(models.Model):
         super().write(vals)
         # Code after write: can use `self`, with the updated values
         return True
+
+
+class TodoTask_4(models.Model):
+    _inherit = 'clv.todo.task'
+
+    effort_estimate = fields.Integer(string='Effort Estimate')
+
+    user_todo_count = fields.Integer(
+        string='User To-Do Count',
+        compute='_compute_user_todo_count')
+
+    @api.multi
+    def _compute_user_todo_count(self):
+        for task in self:
+            task.user_todo_count = task.search_count(
+                [('user_id', '=', task.user_id.id)])

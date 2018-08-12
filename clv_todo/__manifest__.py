@@ -37,6 +37,7 @@
         'views/todo_task_view.xml',
         'views/res_partner_view.xml',
         'views/todo_task_category_view.xml',
+        'views/todo_task_stage_view.xml',
         'views/todo_menu_view.xml',
         'wizard/todo_task_mass_update_view.xml',
         'views/index_template.xml',

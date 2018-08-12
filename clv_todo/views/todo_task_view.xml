@@ -2,24 +2,47 @@
 <odoo>
     <data>
 
+        <!-- Smart Button Action-->
+        <act_window id="action_todo_task_button"
+          name="To-Do Tasks"
+          res_model="clv.todo.task"
+          view_mode="tree,form,calendar,graph,pivot"
+          domain="[('user_id','=',default_user_id)]"/>
+
         <record id="clv_todo_task_view_form" model="ir.ui.view">
             <field name="name">clv.todo.task.form</field>
             <field name="model">clv.todo.task</field>
+            <field name="priority">15</field>
             <field eval="1" name="priority"/>
             <field name="arch" type="xml">
                 <form>
                     <header name="header">
-                        <button name="do_clear_done" type="object" string="Clear Done"/>
+                        <field name="state" invisible="True"/>
+                        <button name="do_clear_done" type="object" string="Clear Done" attrs="{'invisible':[('state', 'in', ['draft'])]}" class="oe_highlight" confirm="Clear Done Tasks?"/>
+                        <field name="stage_id" widget="statusbar" clickable="True" options="{'fold_field': 'fold'}"/>
                     </header>
                     <sheet name="todo_task">
                         <div name="button_box" class="oe_right oe_button_box">
-                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" groups="clv_base.group_reguser">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" groups="clv_base.group_reguser" confirm="Execute Archive Action?">
                                 <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                            <button class="oe_stat_button"
+                                type="action" icon="fa-tasks"
+                                name="%(action_todo_task_button)d"
+                                context="{'default_user_id': user_id}"
+                                help="All to-dos for this user" >
+                                <field string="To-Dos" name="user_todo_count"
+                                widget="statinfo"/>
                             </button>
                         </div>
                         <div name="center" class="oe_center">
                             <label for="name" class="oe_edit_only"/>
                             <h2><field name="name" placeholder="Name..."/></h2>
+                            <h3>
+                                <span class="oe_read_only">By </span>
+                                <label for="user_id" class="oe_edit_only"/>
+                                <field name="user_id" class="oe_inline" options="{'no_open': False, 'no_create': True}"/>
+                            </h3>
                         </div>
                         <div name="button_box_2" class="oe_right oe_button_box">
                         </div>
@@ -29,22 +52,31 @@
                         </div-->
                         <group name="group_top">
                             <group name="group_left">
-                                <field name="user_id" options="{'no_open': False, 'no_create': True}"/>
-                                <field name="is_done"/>
+                                <field name="date_deadline" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                                <field name="effort_estimate"/>
+                                <separator string="Reference"/>
+                                <field name="refers_to" options="{'no_open': False, 'no_create': True}"/>
                             </group>
                             <group name="group_right">
-                                <field name="date_deadline"/>
-                                <field name="team_ids" widget="many2many_tags" options="{'no_open': False, 'no_create': True}"/>
+                                <field name="is_done"/>
                             </group>
                         </group>
                         <!--field name="notes" placeholder="Notes..." colspan="4"/-->
                         <notebook colspan="4">
-                            <page name="settings" string="Settings" groups="clv_base.group_reguser" invisible="True">
-                                <group name="settings">
-                                </group>
+                            <page string="Team" name="team_page">
+                                <field name="team_ids" options="{'no_open': False, 'no_create': True}"/>
                             </page>
+                                <page name="settings" string="Settings" groups="clv_base.group_reguser" invisible="True">
+                                    <group name="settings">
+                                    </group>
+                                </page>
                         </notebook>
                     </sheet>
+                    <!-- Discuss widgets -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -57,13 +89,15 @@
                 <tree name="todo_tasks" string="To-do Tasks"
                       decoration-muted="is_done==True"
                       decoration-info="is_done==False"
-                      decoration-bf="is_done==False">
+                      decoration-bf="is_done==False"
+                      delete="false">
                     <field name="name"/>
                     <!--field name="code"/-->
                     <field name="user_id"/>
                     <field name="is_done"/>
                     <field name="date_deadline"/>
                     <!--field name="notes"/-->
+                    <field name="state" invisible="1"/>
                     <field name="active" invisible="1"/>
                 </tree>
             </field>
@@ -86,9 +120,43 @@
                     <newline/>
                     <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
                     <group  name="group_by" expand="0" string="Group By...">
-                        <filter string="Responsible" context="{'group_by': 'user_id'}"/>
+                        <filter string="By User" context="{'group_by': 'user_id'}"/>
                    </group>
                </search>
+            </field>
+        </record>
+
+        <record id="clv_todo_task_view_calendar" model="ir.ui.view">
+            <field name="name">clv.todo.task.calendar</field>
+            <field name="model">clv.todo.task</field>
+            <field name="arch" type="xml">
+                <calendar date_start="date_deadline" color="user_id">
+                    <!-- Fields used for the display text -->
+                    <field name="name"/>
+                    <field name="stage_id"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="clv_todo_task_view_graph" model="ir.ui.view">
+            <field name="model">clv.todo.task</field>
+            <field name="arch" type="xml">
+                <graph type="bar">
+                      <field name="stage_id"/>
+                      <field name="effort_estimate" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="clv_todo_task_view_pivot" model="ir.ui.view">
+            <field name="model">clv.todo.task</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="stage_id" type="col"/>
+                    <field name="user_id"/>
+                    <field name="date_deadline" interval="week"/>
+                    <field name="effort_estimate" type="measure"/>
+                </pivot>
             </field>
         </record>
 
@@ -97,7 +165,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">clv.todo.task</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,calendar,graph,pivot</field>
             <field name="context">{'search_default_filter_not_done': True}</field>
             <field name="search_view_id" ref="clv_todo_task_view_search"/>
             <field name="help" type="html">
