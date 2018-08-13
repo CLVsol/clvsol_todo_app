@@ -24,7 +24,7 @@ from openerp import api, fields, models
 class TodoTaskCategory(models.Model):
     _description = 'To-do Task Category'
     _name = 'clv.todo.task.category'
-    _inherit = 'clv.category.model'
+    _inherit = 'clv.abstract.category'
 
     code = fields.Char(string='Category Code', required=False)
 
